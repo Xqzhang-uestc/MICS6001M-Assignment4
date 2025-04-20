@@ -1,0 +1,18 @@
+// HMM State Transition Diagram
+digraph {
+	rankdir=LR
+	start_0 [label="" height=0 shape=none width=0]
+	start_0 -> "State 1" [label=0.30]
+	"State 1" [shape=circle]
+	start_1 [label="" height=0 shape=none width=0]
+	start_1 -> "State 2" [label=0.70]
+	"State 2" [shape=circle]
+	"State 1" -> "State 1" [label=0.80]
+	"State 1" -> "State 2" [label=0.20]
+	"State 2" -> "State 1" [label=0.40]
+	"State 2" -> "State 2" [label=0.60]
+	emissions_0 [label=<<table border="0" cellborder="0"><tr><td align="left">S</td><td align="right">0.10</td></tr><tr><td align="left">G</td><td align="right">0.40</td></tr><tr><td align="left">L</td><td align="right">0.50</td></tr></table>> margin=0.1 shape=box]
+	"State 1" -> emissions_0 [arrowhead=none style=dashed]
+	emissions_1 [label=<<table border="0" cellborder="0"><tr><td align="left">S</td><td align="right">0.50</td></tr><tr><td align="left">G</td><td align="right">0.40</td></tr><tr><td align="left">L</td><td align="right">0.10</td></tr></table>> margin=0.1 shape=box]
+	"State 2" -> emissions_1 [arrowhead=none style=dashed]
+}
