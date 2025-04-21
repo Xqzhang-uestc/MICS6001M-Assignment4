@@ -47,7 +47,7 @@ def run_experiments():
 
     # 实验1: 大初始误差
     true_pos1 = np.cumsum([10] * 50)
-    measurements1 = true_pos1 + np.random.normal(0, np.sqrt(30), 50)
+    measurements1 = true_pos1 + np.random.normal(0, np.sqrt(30), 50) #50个服从高斯分布的噪声项，均值为0，标准差为√30
     kf1 = KalmanFilter(initial_pos=1000, initial_uncertainty=1000,
                        process_noise=1, measurement_noise=30)
     for z in measurements1:
@@ -55,28 +55,29 @@ def run_experiments():
         kf1.update(z)
 
     # 实验2: 大测量噪声
-    true_pos2 = np.cumsum([10] * 100)
-    measurements2 = true_pos2 + np.random.normal(0, np.sqrt(300), 100)
+    true_pos2 = np.cumsum([10] * 50)
+    measurements2 = true_pos2 + np.random.normal(0, np.sqrt(1500), 50) #100个服从高斯分布的噪声项，均值为0，标准差为√300
     kf2 = KalmanFilter(initial_pos=0, initial_uncertainty=1,
-                       process_noise=2, measurement_noise=300)
+                       process_noise=2, measurement_noise=1500)
     for z in measurements2:
         kf2.predict()
         kf2.update(z)
 
     # 实验3: 速度变化
-    velocities = [10 * (1.05) ** t for t in range(50)]
-    true_pos3 = np.cumsum(velocities)
-    measurements3 = true_pos3 + np.random.normal(0, 5, 50)
+    true_pos3 = np.cumsum([10] * 50)
+    velocities = [10 * (1.05) ** t for t in range(50)] # 速度每步增加5%
+    measure_pos3 = np.cumsum(velocities)
+    measurements3 = measure_pos3 + np.random.normal(0, 1, 50)
     kf3 = KalmanFilter(initial_pos=0, initial_uncertainty=1,
-                       process_noise=0.1, measurement_noise=25)
+                       process_noise=0.1, measurement_noise=1)
     for i, z in enumerate(measurements3):
-        kf3.velocity = velocities[i]
+        #kf3.velocity = velocities[i]
         kf3.predict()
         kf3.update(z)
 
     # 绘制实验1结果
     t1 = range(len(true_pos1))
-    axs[0].plot(t1, true_pos1, 'g-', linewidth=2, label='True Position')
+    #axs[0].plot(t1, true_pos1, 'g-', linewidth=2, label='True Position')
     axs[0].plot(t1, measurements1, 'r.', markersize=4, alpha=0.5, label='Measurements')
     axs[0].plot(t1, kf1.predicted_states, 'b--', linewidth=1, label='Predicted')
     axs[0].plot(t1, kf1.updated_states, 'k-', linewidth=2, label='KF Estimate')
@@ -92,7 +93,7 @@ def run_experiments():
 
     # 绘制实验2结果
     t2 = range(len(true_pos2))
-    axs[1].plot(t2, true_pos2, 'g-', linewidth=2, label='True Position')
+    #axs[1].plot(t2, true_pos2, 'g-', linewidth=2, label='True Position')
     axs[1].plot(t2, measurements2, 'r.', markersize=4, alpha=0.5, label='Measurements')
     axs[1].plot(t2, kf2.predicted_states, 'b--', linewidth=1, label='Predicted')
     axs[1].plot(t2, kf2.updated_states, 'k-', linewidth=2, label='KF Estimate')
@@ -108,7 +109,7 @@ def run_experiments():
 
     # 绘制实验3结果
     t3 = range(len(true_pos3))
-    axs[2].plot(t3, true_pos3, 'g-', linewidth=2, label='True Position')
+    #axs[2].plot(t3, true_pos3, 'g-', linewidth=2, label='True Position')
     axs[2].plot(t3, measurements3, 'r.', markersize=4, alpha=0.5, label='Measurements')
     axs[2].plot(t3, kf3.predicted_states, 'b--', linewidth=1, label='Predicted')
     axs[2].plot(t3, kf3.updated_states, 'k-', linewidth=2, label='KF Estimate')

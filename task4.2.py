@@ -5,29 +5,29 @@ from scipy.stats import norm
 
 class KalmanFilter:
     def __init__(self, initial_pos, initial_uncertainty, process_noise, measurement_noise):
-        self.x = initial_pos
-        self.P = initial_uncertainty
-        self.Q = process_noise
-        self.R = measurement_noise
-        self.F = 1  # 状态转移矩阵
-        self.H = 1  # 观测矩阵
+        self.x = initial_pos # 预测初始位置
+        self.P = initial_uncertainty # 预测初始方差
+        self.Q = process_noise # 预测过程噪声
+        self.R = measurement_noise # 测量噪声（测量方差）
+        self.F = 1  # 状态转移矩阵描述状态如何从上一步变到下一步，=1 表示匀速或无动力过程
+        self.H = 1  # 观测矩阵描述状态如何映射成可以观测的量，这里直接观测位置，所以=1
         # 记录中间结果
-        self.predicted_states = []
-        self.updated_states = []
-        self.variances = []
+        self.predicted_states = [] #存储每一步预测的状态（先验）
+        self.updated_states = [] #存储每一步更新后的状态（后验）
+        self.variances = [] #存储每一步更新后的方差（后验）
 
     def predict_without_K(self):
-        self.x = self.F * self.x
-        self.P = self.F * self.P * self.F + self.Q
-        self.predicted_states.append(self.x)
+        self.x = self.F * self.x # 预测当前均值
+        self.P = self.F * self.P * self.F + self.Q # 预测当前方差
+        self.predicted_states.append(self.x) #记录预测值
         return self.x, self.P
 
     def update_without_K(self, z):
-        y = z - self.H * self.x
-        S = self.H * self.P * self.H + self.R
-        K_temp = self.P * self.H / S
-        self.x += K_temp * y
-        self.P *= (1 - K_temp * self.H)
+        y = z - self.H * self.x  # 观测残差：测量值-预测值
+        S = self.H * self.P * self.H + self.R  # 预测的观测方差（S ≈ σ^2 + σ_z^2）
+        K_temp = self.P * self.H / S  # σ^2 / (σ^2 + σ_z^2)
+        self.x += K_temp * y    # 更新均值：结合 prior 和 z 的加权平均
+        self.P *= (1 - K_temp * self.H)  #  更新方差：更新为合并后的新 σ^2
         self.updated_states.append(self.x)
         self.variances.append(self.P)
         return K_temp
@@ -39,8 +39,8 @@ class KalmanFilter:
         return self.x, self.P
 
     def update_with_K(self, z):
-        K = self.P * self.H / (self.H * self.P * self.H + self.R)
-        self.x += K * (z - self.H * self.x)
+        K = self.P * self.H / (self.H * self.P * self.H + self.R) # 卡尔曼增益
+        self.x += K * (z - self.H * self.x) #estimate = prediction + K·(measurement −prediction)
         self.P *= (1 - K * self.H)
         self.updated_states.append(self.x)
         self.variances.append(self.P)
