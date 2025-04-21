@@ -121,7 +121,7 @@ def plot_hmm(pi, A, B, observations):
     plt.title("HMM State Transition Diagram with Emissions", fontsize=14)
     plt.axis('off')  # 关闭坐标轴
     plt.tight_layout()
-    plt.savefig("hmm_diagram.png", dpi=300)  # 保存图形为PNG文件
+    plt.savefig("pics/hmm_diagram.png", dpi=300)  # 保存图形为PNG文件
     plt.close()  # 关闭当前图形
     # plt.show()
 
@@ -272,7 +272,7 @@ def plot_trellis_diagram(pi, A, B, observations, observation_symbols):
     ax.set_title('HMM Trellis Diagram with Precise Arrow Connections', fontsize=14)
     ax.axis('off')
     plt.tight_layout()
-    plt.savefig("hmm_trellis_diagram.png", dpi=300)  # Save the figure as a PNG file
+    plt.savefig("pics/hmm_trellis_diagram.png", dpi=300)  # Save the figure as a PNG file
     plt.close()  # Close the current figure
     # plt.show()
 

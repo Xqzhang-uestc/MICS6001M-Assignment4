@@ -113,7 +113,7 @@ def draw_viterbi_trellis(pi, A, B, O, observation_indices, best_path, logprob):
     ax.axis('off')
     plt.tight_layout()
     plt.grid(False)
-    plt.savefig("viterbi_trellis.png", dpi=300)
+    plt.savefig("pics/viterbi_trellis.png", dpi=300)
     plt.close()
     # plt.show()
 
