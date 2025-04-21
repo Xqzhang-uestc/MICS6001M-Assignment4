@@ -11,7 +11,7 @@ start_prob = np.array([0.99, 0.01])  # [P(fair), P(loaded)]
 # Transition matrix (A)
 trans_mat = np.array([
     [0.99, 0.01],  # Fair -> [Fair, Loaded]
-    [0.01, 0.99]   # Loaded -> [Fair, Loaded]
+    [0.99, 0.01]   # Loaded -> [Fair, Loaded]
 ])
 
 # Emission probabilities (B)

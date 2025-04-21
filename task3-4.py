@@ -11,7 +11,7 @@ observations = np.array([
 ])
 
 # 1. Two-state HMM (Normal/Abnormal)
-model_2state = hmm.GaussianHMM(n_components=2, covariance_type="diag", n_iter=1000,  init_params="", params="stmc")
+model_2state = hmm.GaussianHMM(n_components=2, covariance_type="full", n_iter=1000,  init_params="", params="stmc", random_state=1)
 
 # Initialize with problem parameters
 model_2state.startprob_ = np.array([1.0, 0.0])  # Starts in normal state
@@ -30,7 +30,7 @@ print("Covariance matrices:")
 print(model_2state.covars_)
 
 # 2. Three-state HMM (adding Uncertain state)
-model_3state = hmm.GaussianHMM(n_components=3, covariance_type="diag", n_iter=1000, init_params="", params="stmc")
+model_3state = hmm.GaussianHMM(n_components=3, covariance_type="full", n_iter=1000, init_params="tc", params="stmc", random_state=1)
 model_3state.startprob_ = np.array([1.0, 0.0, 0.0])
 model_3state.means_ = np.array([[50, 50],  # Normal
                                 [90, 50],  # Abnormal
@@ -109,7 +109,7 @@ plt.title("Predicted States vs Observations")
 plt.xlabel("Time step")
 plt.ylabel("Temperature / State")
 plt.legend()
-plt.show()
+# plt.show()
 
 # # 获取预测的隐藏状态序列
 # predicted_states_2state = model_2state.predict(observations)
